@@ -1,0 +1,37 @@
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+}
+
+model TechStack {
+  id        String   @id @default(cuid())
+  name      String
+  icon      String?
+  category  String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  imageUrl    String?
+  liveUrl     String?
+  repoUrl     String?
+  techUsed    String?  @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
