@@ -1,19 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { Project } from "@prisma/client";
+import { Project, ProjectImage } from "@prisma/client";
 import ProjectForm from "./ProjectForm";
 import ProjectTable from "./ProjectTable";
 
+type ProjectWithImages = Project & { images: ProjectImage[] };
+
 type Props = {
-    items: Project[];
+    items: ProjectWithImages[];
 };
 
 export default function ProjectManager({ items }: Props) {
-    const [editing, setEditing] = useState<Project | null>(null);
+    const [editing, setEditing] = useState<ProjectWithImages | null>(null);
     const [showForm, setShowForm] = useState(false);
 
-    const handleEdit = (item: Project) => {
+    const handleEdit = (item: ProjectWithImages) => {
         setEditing(item);
         setShowForm(true);
     };

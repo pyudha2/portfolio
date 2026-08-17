@@ -2,7 +2,10 @@ import { prisma } from "@/lib/prisma";
 import ProjectManager from "@/components/admin/ProjectManager";
 
 export default async function ProjectsPage() {
-    const items = await prisma.project.findMany({ orderBy: { order: "asc" } });
+    const items = await prisma.project.findMany({
+        orderBy: { order: "asc" },
+        include: { images: true },
+    });
 
     return (
         <main className="min-h-screen bg-neutral-950 px-6 py-10">

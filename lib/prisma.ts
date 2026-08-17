@@ -3,12 +3,15 @@ import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
+const dbUrl = new URL(process.env.DATABASE_URL as string);
+
 const adapter = new PrismaMariaDb({
-  host: "localhost",
-  port: 3306,
-  user: "root",
-  password: "",
-  database: "portfolio_db",
+  host: dbUrl.hostname,
+  port: Number(dbUrl.port) || 3306,
+  user: dbUrl.username,
+  password: dbUrl.password,
+  database: dbUrl.pathname.replace("/", ""),
+  connectionLimit: 5,
 });
 
 export const prisma =

@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Project } from "@prisma/client";
+import { Project, ProjectImage } from "@prisma/client";
 import { deleteProject } from "@/lib/actions/project";
 
+type ProjectWithImages = Project & { images: ProjectImage[] };
+
 type Props = {
-    items: Project[];
-    onEdit: (item: Project) => void;
+    items: ProjectWithImages[];
+    onEdit: (item: ProjectWithImages) => void;
 };
 
 export default function ProjectTable({ items, onEdit }: Props) {
@@ -28,6 +30,7 @@ export default function ProjectTable({ items, onEdit }: Props) {
                     <tr>
                         <th className="px-4 py-3">Order</th>
                         <th className="px-4 py-3">Judul</th>
+                        <th className="px-4 py-3">Tipe</th>
                         <th className="px-4 py-3">Tech Used</th>
                         <th className="px-4 py-3">Aksi</th>
                     </tr>
@@ -37,6 +40,11 @@ export default function ProjectTable({ items, onEdit }: Props) {
                         <tr key={item.id} className="border-t border-neutral-800">
                             <td className="px-4 py-3">{item.order}</td>
                             <td className="px-4 py-3">{item.title}</td>
+                            <td className="px-4 py-3">
+                                <span className="rounded-full bg-neutral-800 px-2 py-1 text-xs">
+                                    {item.type === "FULL" ? "Full Project" : "Gallery Only"}
+                                </span>
+                            </td>
                             <td className="px-4 py-3">{item.techUsed ?? "-"}</td>
                             <td className="px-4 py-3">
                                 <div className="flex gap-3">
@@ -56,7 +64,7 @@ export default function ProjectTable({ items, onEdit }: Props) {
                     ))}
                     {items.length === 0 && (
                         <tr>
-                            <td colSpan={4} className="px-4 py-6 text-center text-neutral-500">
+                            <td colSpan={5} className="px-4 py-6 text-center text-neutral-500">
                                 Belum ada data
                             </td>
                         </tr>
