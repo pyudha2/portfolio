@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import fs from "fs";
+import path from "path";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
@@ -12,6 +14,11 @@ const adapter = new PrismaMariaDb({
   password: dbUrl.password,
   database: dbUrl.pathname.replace("/", ""),
   connectionLimit: 5,
+  ssl: {
+    ca: process.env.AIVEN_CA_CERT
+      ? process.env.AIVEN_CA_CERT.replace(/\\n/g, "\n")
+      : fs.readFileSync(path.join(process.cwd(), "certs/aiven-ca.pem")).toString(),
+  },
 });
 
 export const prisma =
