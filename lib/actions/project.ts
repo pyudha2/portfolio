@@ -6,13 +6,35 @@ import { projectSchema, ProjectSchema } from "@/lib/validations/project";
 
 export async function createProject(data: ProjectSchema) {
     const parsed = projectSchema.parse(data);
-    await prisma.project.create({ data: parsed });
+    const { images, ...rest } = parsed;
+
+    await prisma.project.create({
+        data: {
+            ...rest,
+            images: images
+                ? { create: images.map((url, index) => ({ url, order: index })) }
+                : undefined,
+        },
+    });
+
     revalidatePath("/admin/projects");
 }
 
 export async function updateProject(id: string, data: ProjectSchema) {
     const parsed = projectSchema.parse(data);
-    await prisma.project.update({ where: { id }, data: parsed });
+    const { images, ...rest } = parsed;
+
+    await prisma.project.update({
+        where: { id },
+        data: {
+            ...rest,
+            images: {
+                deleteMany: {},
+                create: images ? images.map((url, index) => ({ url, order: index })) : [],
+            },
+        },
+    });
+
     revalidatePath("/admin/projects");
 }
 

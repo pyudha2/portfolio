@@ -23,15 +23,31 @@ model TechStack {
   updatedAt DateTime @updatedAt
 }
 
+enum ProjectType {
+  FULL
+  GALLERY
+}
+
 model Project {
-  id          String   @id @default(cuid())
+  id          String         @id @default(cuid())
   title       String
-  description String   @db.Text
+  description String         @db.Text
   imageUrl    String?
   liveUrl     String?
   repoUrl     String?
-  techUsed    String?  @db.Text
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  techUsed    String?        @db.Text
+  type        ProjectType    @default(FULL)
+  order       Int            @default(0)
+  images      ProjectImage[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model ProjectImage {
+  id        String   @id @default(cuid())
+  url       String
+  order     Int      @default(0)
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }

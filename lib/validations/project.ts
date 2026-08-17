@@ -7,6 +7,8 @@ export const projectSchema = z.object({
     liveUrl: z.string().optional(),
     repoUrl: z.string().optional(),
     techUsed: z.string().optional(),
+    type: z.enum(["FULL", "GALLERY"]),
+    images: z.array(z.string()).optional(),
     order: z.number().int(),
 });
 
