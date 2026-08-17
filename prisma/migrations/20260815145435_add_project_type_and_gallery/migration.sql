@@ -5,10 +5,10 @@
 
 */
 -- AlterTable
-ALTER TABLE `project` ADD COLUMN `type` ENUM('FULL', 'GALLERY') NOT NULL DEFAULT 'FULL';
+ALTER TABLE `Project` ADD COLUMN `type` ENUM('FULL', 'GALLERY') NOT NULL DEFAULT 'FULL';
 
 -- DropTable
-DROP TABLE `techstack`;
+DROP TABLE `TechStack`;
 
 -- CreateTable
 CREATE TABLE `ProjectImage` (
