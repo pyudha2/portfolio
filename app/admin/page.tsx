@@ -2,6 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import LogoutButton from "@/components/admin/LogoutButton";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboard() {
     const [techStackCount, projectCount] = await Promise.all([
         prisma.techStack.count(),
