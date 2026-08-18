@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import TechStackManager from "@/components/admin/TechStackManager";
 
+export const dynamic = "force-dynamic";
+
 export default async function TechStackPage() {
     const items = await prisma.techStack.findMany({ orderBy: { order: "asc" } });
 
