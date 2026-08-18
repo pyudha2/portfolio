@@ -13,7 +13,7 @@ const adapter = new PrismaMariaDb({
   user: dbUrl.username,
   password: dbUrl.password,
   database: dbUrl.pathname.replace("/", ""),
-  connectionLimit: 5,
+  connectionLimit: 3,
   ssl: {
     ca: process.env.AIVEN_CA_CERT
       ? process.env.AIVEN_CA_CERT.replace(/\\n/g, "\n")
@@ -25,4 +25,4 @@ export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({ adapter });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+globalForPrisma.prisma = prisma;
