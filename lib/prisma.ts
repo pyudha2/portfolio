@@ -14,6 +14,8 @@ const adapter = new PrismaMariaDb({
   password: dbUrl.password,
   database: dbUrl.pathname.replace("/", ""),
   connectionLimit: 3,
+  connectTimeout: 20000,
+  acquireTimeout: 20000,
   ssl: {
     ca: process.env.AIVEN_CA_CERT
       ? process.env.AIVEN_CA_CERT.replace(/\\n/g, "\n")
