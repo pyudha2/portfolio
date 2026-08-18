@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { projectSchema } from "@/lib/validations/project";
@@ -39,6 +40,8 @@ export async function PUT(
         include: { images: true },
     });
 
+    revalidatePath("/");
+
     return NextResponse.json(updated);
 }
 
@@ -55,6 +58,8 @@ export async function DELETE(
     const { id } = await params;
 
     await prisma.project.delete({ where: { id } });
+
+    revalidatePath("/");
 
     return NextResponse.json({ success: true });
 }

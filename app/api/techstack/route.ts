@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { techStackSchema } from "@/lib/validations/techstack";
@@ -30,6 +31,8 @@ export async function POST(request: NextRequest) {
     const created = await prisma.techStack.create({
         data: parsed.data,
     });
+
+    revalidatePath("/");
 
     return NextResponse.json(created, { status: 201 });
 }

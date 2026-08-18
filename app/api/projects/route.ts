@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { projectSchema } from "@/lib/validations/project";
@@ -41,6 +42,8 @@ export async function POST(request: NextRequest) {
         },
         include: { images: true },
     });
+
+    revalidatePath("/");
 
     return NextResponse.json(created, { status: 201 });
 }
