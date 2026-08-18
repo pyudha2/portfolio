@@ -8,6 +8,7 @@ import { projectSchema } from "@/lib/validations/project";
 export async function GET() {
     const data = await prisma.project.findMany({
         orderBy: { order: "asc" },
+        include: { images: { orderBy: { order: "asc" } } },
     });
 
     return NextResponse.json(data);
@@ -27,8 +28,18 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     }
 
+    const { images, ...projectData } = parsed.data;
+
     const created = await prisma.project.create({
-        data: parsed.data,
+        data: {
+            ...projectData,
+            images: images
+                ? {
+                    create: images.map((url, index) => ({ url, order: index })),
+                }
+                : undefined,
+        },
+        include: { images: true },
     });
 
     return NextResponse.json(created, { status: 201 });

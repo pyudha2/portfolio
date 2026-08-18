@@ -23,9 +23,20 @@ export async function PUT(
         return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     }
 
+    const { images, ...projectData } = parsed.data;
+
     const updated = await prisma.project.update({
         where: { id },
-        data: parsed.data,
+        data: {
+            ...projectData,
+            images: images
+                ? {
+                    deleteMany: {},
+                    create: images.map((url, index) => ({ url, order: index })),
+                }
+                : undefined,
+        },
+        include: { images: true },
     });
 
     return NextResponse.json(updated);
