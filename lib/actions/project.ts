@@ -18,6 +18,7 @@ export async function createProject(data: ProjectSchema) {
     });
 
     revalidatePath("/admin/projects");
+    revalidatePath("/");
 }
 
 export async function updateProject(id: string, data: ProjectSchema) {
@@ -36,9 +37,11 @@ export async function updateProject(id: string, data: ProjectSchema) {
     });
 
     revalidatePath("/admin/projects");
+    revalidatePath("/");
 }
 
 export async function deleteProject(id: string) {
     await prisma.project.delete({ where: { id } });
     revalidatePath("/admin/projects");
+    revalidatePath("/");
 }
